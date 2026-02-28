@@ -8,7 +8,7 @@ Siga estes passos para configurar o ambiente em sua máquina local:
 Use os comandos abaixo (lembre-se de trocar "seu-usuario" pelo seu nome no GitHub):
 
 `git clone https://github.com/seu-usuario/techtrack.git`
-e
+e depois
 `cd techtrack`
 
 ### 2. Ambiente Virtual (Venv)
@@ -24,7 +24,6 @@ Mac/Linux: `python3 -m venv venv` e depois `source venv/bin/activate`
 ### 4. Banco de Dados e Servidor
 Prepare o banco de dados inicial e suba o site:
 
-`python manage.py migrate`
-`python manage.py runserver`
+`python manage.py migrate` e depois `python manage.py runserver`
 
 Acesse em seu navegador: http://127.0.0.1:8000/
