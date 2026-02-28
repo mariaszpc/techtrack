@@ -5,9 +5,10 @@ O TechTrack é uma plataforma de Gestão de Conhecimento Pessoal (PKM) e Carreir
 Siga estes passos para configurar o ambiente em sua máquina local:
 
 ### 1. Clonar o Repositório
-Use o comando abaixo (lembre-se de trocar "seu-usuario" pelo seu nome no GitHub):
+Use os comandos abaixo (lembre-se de trocar "seu-usuario" pelo seu nome no GitHub):
 
 `git clone https://github.com/seu-usuario/techtrack.git`
+e
 `cd techtrack`
 
 ### 2. Ambiente Virtual (Venv)
