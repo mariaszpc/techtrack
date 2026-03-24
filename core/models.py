@@ -99,3 +99,67 @@ class Framework(models.Model):
 
     class Meta:
         verbose_name_plural = "Frameworks"
+
+class Vaga(models.Model):
+    titulo = models.CharField(max_length=200)
+    empresa = models.CharField(max_length=100)
+    link_anuncio = models.URLField(max_length=500)
+    data_postagem = models.DateField(blank=True, null=True)
+    
+    # Status do seu Processo (Sua gestão de carreira)
+    STATUS_CHOICES = [
+        ('Interesse', 'Apenas Interesse'),
+        ('Aplicado', 'Currículo Enviado'),
+        ('Entrevista', 'Em Fase de Entrevistas'),
+        ('Teste', 'Teste Técnico em Andamento'),
+        ('Negado', 'Não Selecionada'),
+        ('Aprovado', 'Contratada! 🎉'),
+    ]
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Interesse')
+
+    # RELAÇÕES
+    # Usamos ManyToMany porque uma vaga pede várias techs, e uma tech aparece em várias vagas.
+    requisitos_linguagens = models.ManyToManyField('Linguagem', blank=True)
+    requisitos_frameworks = models.ManyToManyField('Framework', blank=True)
+    requisitos_bibliotecas = models.ManyToManyField('Biblioteca', blank=True)
+    # requisitos_bancos = models.ManyToManyField('BancoDeDados', blank=True) # Criaremos este depois
+
+    # Conteúdo Rico
+    descricao_vaga = MDTextField(help_text="Cole aqui a descrição completa para consulta posterior")
+    anotacoes_pessoais = MDTextField(help_text="O que você estudou ou preparou para essa vaga específica?")
+
+    def __str__(self):
+        return f"{self.titulo} - {self.empresa}"
+
+    class Meta:
+        verbose_name_plural = "Vagas"
+
+class Aplicacao(models.Model):
+    # RELACIONAMENTO: Uma aplicação pertence a uma Vaga
+    vaga = models.ForeignKey(Vaga, on_delete=models.CASCADE, related_name='aplicacoes')
+    
+    data_envio = models.DateField(auto_now_add=True)
+    
+    # Etapas do funil de recrutamento
+    ETAPA_CHOICES = [
+        ('CV', 'Envio de Currículo'),
+        ('Fit', 'Fit Cultural / RH'),
+        ('Tecnico', 'Teste Técnico'),
+        ('Gestor', 'Entrevista com Gestor'),
+        ('Proposta', 'Proposta Recebida'),
+    ]
+    etapa_atual = models.CharField(max_length=20, choices=ETAPA_CHOICES, default='CV')
+    
+    # Detalhes da sua participação
+    curriculo_versao = models.CharField(max_length=100, blank=True, help_text="Ex: CV_DataScience_v2.pdf")
+    portfolio_link = models.URLField(blank=True, help_text="Link para o projeto enviado")
+    
+    # Conteúdo Rico para histórico
+    feedback_recebido = MDTextField(blank=True, help_text="O que a empresa disse sobre você?")
+    anotacoes_pos_entrevista = MDTextField(blank=True, help_text="O que você achou da empresa?")
+
+    def __str__(self):
+        return f"Aplicação: {self.vaga.titulo} ({self.get_etapa_atual_display()})"
+
+    class Meta:
+        verbose_name_plural = "Aplicações"

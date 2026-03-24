@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Linguagem, Paradigma, Biblioteca, Framework
+from .models import Linguagem, Paradigma, Biblioteca, Framework, Vaga, Aplicacao
 
 # Registro simples para o Paradigma (só precisamos do nome)
 @admin.register(Paradigma)
@@ -41,3 +41,18 @@ class FrameworkAdmin(admin.ModelAdmin):
     list_display = ('title', 'linguagem', 'last_updated')
     list_filter = ('linguagem',)
     search_fields = ('title', 'description')
+
+@admin.register(Vaga)
+class VagaAdmin(admin.ModelAdmin):
+    # Colunas que aparecem na lista
+    list_display = ('titulo', 'empresa', 'status', 'data_postagem')
+    # Filtros na barra lateral
+    list_filter = ('status', 'requisitos_linguagens')
+    # Busca por texto
+    search_fields = ('titulo', 'empresa', 'descricao_vaga')
+
+@admin.register(Aplicacao)
+class AplicacaoAdmin(admin.ModelAdmin):
+    list_display = ('vaga', 'etapa_atual', 'data_envio')
+    list_filter = ('etapa_atual', 'data_envio')
+    search_fields = ('vaga__titulo', 'vaga__empresa')
