@@ -10,7 +10,7 @@ class Paradigma(models.Model):
 class Linguagem(models.Model):
     title = models.CharField(max_length=100)
 
-    # NÍVEL DE ABSTRAÇÃO
+    # Nível de abstração
     ABSTRACAO_CHOICES = [
         ('Baixo', 'Baixo'), #(valor_no_banco, rótulo_na_tela)
         ('Médio', 'Médio'),
@@ -18,7 +18,7 @@ class Linguagem(models.Model):
     ]
     nivel_abstracao = models.CharField(max_length=20, choices=ABSTRACAO_CHOICES)
 
-    # MODO DE EXECUÇÃO
+    # Modo de execução
     EXECUCAO_CHOICES = [
         ('Compilado', 'Compilado'),
         ('Interpretado', 'Interpretado'),
@@ -26,7 +26,7 @@ class Linguagem(models.Model):
     ]
     modo_execucao = models.CharField(max_length=20, choices=EXECUCAO_CHOICES)
 
-    # TIPAGEM
+    # Tipagem
     TIPAGEM_CHOICES = [
         ('Estática', 'Estática'),
         ('Dinâmica', 'Dinâmica'),
@@ -36,10 +36,10 @@ class Linguagem(models.Model):
     ]
     tipagem = models.CharField(max_length=20, choices=TIPAGEM_CHOICES)
 
-    # PARADIGMAS (Vários para uma linguagem)
+    # Paradigmas (Vários para uma linguagem)
     paradigmas = models.ManyToManyField(Paradigma, blank=True)
 
-    # Conteúdo Rico
+    # Conteúdo
     description = models.TextField()
     conteudo = MDTextField()
 
@@ -66,7 +66,7 @@ class Biblioteca(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     last_updated = models.DateTimeField(auto_now=True)
     
-    # Conteúdo Rico (Markdown)
+    # Conteúdo (Markdown)
     content = MDTextField()
 
     def __str__(self):
@@ -106,7 +106,7 @@ class Vaga(models.Model):
     link_anuncio = models.URLField(max_length=500)
     data_postagem = models.DateField(blank=True, null=True)
     
-    # Status do seu Processo (Sua gestão de carreira)
+    # Status do seu Processo
     STATUS_CHOICES = [
         ('Interesse', 'Apenas Interesse'),
         ('Aplicado', 'Currículo Enviado'),
@@ -122,9 +122,9 @@ class Vaga(models.Model):
     requisitos_linguagens = models.ManyToManyField('Linguagem', blank=True)
     requisitos_frameworks = models.ManyToManyField('Framework', blank=True)
     requisitos_bibliotecas = models.ManyToManyField('Biblioteca', blank=True)
-    # requisitos_bancos = models.ManyToManyField('BancoDeDados', blank=True) # Criaremos este depois
+    requisitos_bancos = models.ManyToManyField('BancoDeDados', blank=True)
 
-    # Conteúdo Rico
+    # Conteúdo
     descricao_vaga = MDTextField(help_text="Cole aqui a descrição completa para consulta posterior")
     anotacoes_pessoais = MDTextField(help_text="O que você estudou ou preparou para essa vaga específica?")
 
@@ -154,7 +154,7 @@ class Aplicacao(models.Model):
     curriculo_versao = models.CharField(max_length=100, blank=True, help_text="Ex: CV_DataScience_v2.pdf")
     portfolio_link = models.URLField(blank=True, help_text="Link para o projeto enviado")
     
-    # Conteúdo Rico para histórico
+    # Conteúdo para histórico
     feedback_recebido = MDTextField(blank=True, help_text="O que a empresa disse sobre você?")
     anotacoes_pos_entrevista = MDTextField(blank=True, help_text="O que você achou da empresa?")
 
@@ -163,3 +163,28 @@ class Aplicacao(models.Model):
 
     class Meta:
         verbose_name_plural = "Aplicações"
+
+class BancoDeDados(models.Model):
+    nome = models.CharField(max_length=100)
+    
+    TIPO_CHOICES = [
+        ('SQL', 'Relacional (SQL)'),
+        ('NoSQL', 'Não-Relacional (NoSQL)'),
+        ('NewSQL', 'NewSQL'),
+    ]
+    tipo = models.CharField(max_length=20, choices=TIPO_CHOICES)
+    
+    description = models.TextField()
+    documentacao = models.URLField(blank=True)
+    
+    # Relação com Linguagem (ex: PostgreSQL é muito usado com Python)
+    linguagens_compativeis = models.ManyToManyField('Linguagem', blank=True)
+    
+    content = MDTextField()
+
+    def __str__(self):
+        return f"{self.nome} ({self.tipo})"
+
+    class Meta:
+        verbose_name = "Banco de Dados"
+        verbose_name_plural = "Bancos de Dados"
