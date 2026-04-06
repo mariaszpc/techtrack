@@ -1,14 +1,36 @@
 from django.db import models
 from mdeditor.fields import MDTextField
 
-class Paradigma(models.Model):
-    nome = models.CharField(max_length=50)
+class BaseModel(models.Model):
+    titulo = models.CharField(max_length=200)
+    aliases = models.CharField(max_length=200, blank=True, verbose_name="Apelidos/AKA")
+    descricao_breve = models.TextField(blank=True, verbose_name="Descrição Curta")
     
+    conteudo = MDTextField(verbose_name="Conteúdo Principal")
+    referencias = MDTextField(blank=True, verbose_name="Referências e Guias Práticos")
+    
+    link_oficial = models.URLField(max_length=500, blank=True)
+    link_documentacao = models.URLField(max_length=500, blank=True)
+    
+    # O Django gerencia estas datas automaticamente
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True # Não cria uma tabela para esta classe
+
+class Paradigma(models.Model):
+    nome = models.CharField(max_length=50, unique=True)
+
     def __str__(self):
         return self.nome
 
-class Linguagem(models.Model):
-    title = models.CharField(max_length=100)
+    class Meta:
+        verbose_name_plural = "Paradigmas"
+
+class Linguagem(BaseModel):
+    ABSTRACAO_CHOICES = [('Baixo', 'Baixo'), ('Médio', 'Médio'), ('Alto', 'Alto')]
+    nivel_abstracao = models.CharField(max_length=20, choices=ABSTRACAO_CHOICES)
 
     # Nível de abstração
     ABSTRACAO_CHOICES = [
@@ -37,65 +59,33 @@ class Linguagem(models.Model):
     tipagem = models.CharField(max_length=20, choices=TIPAGEM_CHOICES)
 
     # Paradigmas (Vários para uma linguagem)
-    paradigmas = models.ManyToManyField(Paradigma, blank=True)
-
-    # Conteúdo
-    description = models.TextField()
-    conteudo = MDTextField()
+    paradigmas = models.ManyToManyField(
+        Paradigma, 
+        blank=True, 
+        related_name='linguagens'
+    )
 
     def __str__(self):
-        return self.title
+        return self.titulo
         
     class Meta:
         verbose_name_plural = "Linguagens"
 
-class Biblioteca(models.Model):
-    title = models.CharField(max_length=100)
-    aliases = models.CharField(max_length=200, blank=True)
-    description = models.TextField()
-    
-    # RELACIONAMENTO: Cada biblioteca pertence a uma Linguagem
-    # Se a linguagem for deletada, as bibliotecas dela também são (on_delete=models.CASCADE)
+class Biblioteca(BaseModel):
     linguagem = models.ForeignKey(Linguagem, on_delete=models.CASCADE, related_name='bibliotecas')
-    
-    # Links e Documentação
-    documentacao = models.URLField(max_length=500, blank=True, help_text="Link para a documentação oficial")
-    link_oficial = models.URLField(max_length=500, blank=True, help_text="Link para o site ou repositório")
-    
-    # Datas automáticas
-    created_at = models.DateTimeField(auto_now_add=True)
-    last_updated = models.DateTimeField(auto_now=True)
-    
-    # Conteúdo (Markdown)
-    content = MDTextField()
 
     def __str__(self):
-        return f"{self.title} ({self.linguagem.title})"
+        return self.titulo
 
     class Meta:
         verbose_name_plural = "Bibliotecas"
 
-class Framework(models.Model):
-    title = models.CharField(max_length=100)
-    aliases = models.CharField(max_length=200, blank=True)
-    description = models.TextField()
-    
-    # RELACIONAMENTO: Um framework pertence a uma linguagem (Ex: Django -> Python)
+class Framework(BaseModel):
+    # Relaciona com a Linguagem (Ex: Django pertence ao Python)
     linguagem = models.ForeignKey(Linguagem, on_delete=models.CASCADE, related_name='frameworks')
-    
-    # Links e Documentação
-    documentacao = models.URLField(max_length=500, blank=True)
-    link_oficial = models.URLField(max_length=500, blank=True)
-    
-    # Datas automáticas
-    created_at = models.DateTimeField(auto_now_add=True)
-    last_updated = models.DateTimeField(auto_now=True)
-    
-    # Conteúdo Rico (Markdown)
-    content = MDTextField()
 
     def __str__(self):
-        return f"{self.title} ({self.linguagem.title})"
+        return self.titulo
 
     class Meta:
         verbose_name_plural = "Frameworks"
@@ -164,26 +154,19 @@ class Aplicacao(models.Model):
     class Meta:
         verbose_name_plural = "Aplicações"
 
-class BancoDeDados(models.Model):
-    nome = models.CharField(max_length=100)
-    
+class BancoDeDados(BaseModel):
     TIPO_CHOICES = [
         ('SQL', 'Relacional (SQL)'),
         ('NoSQL', 'Não-Relacional (NoSQL)'),
         ('NewSQL', 'NewSQL'),
     ]
     tipo = models.CharField(max_length=20, choices=TIPO_CHOICES)
-    
-    description = models.TextField()
-    documentacao = models.URLField(blank=True)
-    
+
     # Relação com Linguagem (ex: PostgreSQL é muito usado com Python)
     linguagens_compativeis = models.ManyToManyField('Linguagem', blank=True)
-    
-    content = MDTextField()
 
     def __str__(self):
-        return f"{self.nome} ({self.tipo})"
+        return f"{self.titulo} ({self.tipo})"
 
     class Meta:
         verbose_name = "Banco de Dados"
