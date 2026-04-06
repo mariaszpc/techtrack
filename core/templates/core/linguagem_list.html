@@ -1,0 +1,20 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<h2 class="mb-4">Minha Wiki de Tecnologias</h2>
+<div class="row">
+    {% for lang in linguagens %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ lang.titulo }}</h5>
+                <p class="card-text text-muted">{{ lang.descricao_breve|truncatechars:100 }}</p>
+                <a href="{% url 'linguagem_detail' lang.pk %}" class="btn btn-outline-primary btn-sm">Ver Detalhes</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p>Nenhuma tecnologia cadastrada ainda. Vá ao Admin!</p>
+    {% endfor %}
+</div>
+{% endblock %}

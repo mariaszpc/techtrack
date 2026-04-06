@@ -1,0 +1,79 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'linguagem_list' %}">Wiki</a></li>
+                <li class="breadcrumb-item active">{{ linguagem.titulo }}</li>
+            </ol>
+        </nav>
+
+        <h1 class="display-4 fw-bold">{{ linguagem.titulo }}</h1>
+        {% if linguagem.aliases %}
+            <p class="text-muted"><em>Também conhecido como: {{ linguagem.aliases }}</em></p>
+        {% endif %}
+
+        <hr>
+
+        <div class="my-4">
+            <h4>Resumo</h4>
+            <p class="lead">{{ linguagem.descricao_breve }}</p>
+        </div>
+
+        <div class="my-4 p-4 bg-white border rounded">
+            <h4>Conteúdo Técnico</h4>
+            <div class="content-body">
+                {{ linguagem.conteudo|linebreaks }}
+            </div>
+        </div>
+
+        <div class="my-4">
+            <h4>Referências e Guias</h4>
+            <div class="p-3 bg-light border-start border-4 border-primary">
+                {{ linguagem.referencias|linebreaks }}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">Ficha Técnica</div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Nível:</strong> {{ linguagem.get_nivel_abstracao_display }}</li>
+                <li class="list-group-item"><strong>Execução:</strong> {{ linguagem.get_modo_execucao_display }}</li>
+                <li class="list-group-item"><strong>Tipagem:</strong> {{ linguagem.get_tipagem_display }}</li>
+            </ul>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">Paradigmas</div>
+            <div class="card-body">
+                {% for paradigma in linguagem.paradigmas.all %}
+                    <span class="badge bg-secondary mb-1">{{ paradigma.nome }}</span>
+                {% empty %}
+                    <span class="text-muted small">Nenhum paradigma listado.</span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="d-grid gap-2">
+            {% if linguagem.link_oficial %}
+                <a href="{{ linguagem.link_oficial }}" target="_blank" class="btn btn-dark">Site Oficial</a>
+            {% endif %}
+            {% if linguagem.link_documentacao %}
+                <a href="{{ linguagem.link_documentacao }}" target="_blank" class="btn btn-outline-dark">Documentação</a>
+            {% endif %}
+        </div>
+        
+        <p class="text-center mt-3 small text-muted">
+            Atualizado em: {{ linguagem.last_updated|date:"d/m/Y H:i" }}
+        </p>
+    </div>
+</div>
+
+<div class="mt-5 mb-5">
+    <a href="{% url 'linguagem_list' %}" class="btn btn-link">← Voltar para a lista</a>
+</div>
+{% endblock %}
