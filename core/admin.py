@@ -25,3 +25,15 @@ class BancoDeDadosAdmin(admin.ModelAdmin):
 class ParadigmaAdmin(admin.ModelAdmin):
     list_display = ('nome',)
     search_fields = ('nome',)
+
+@admin.register(Vaga)
+class VagaAdmin(admin.ModelAdmin):
+    list_display = ('titulo', 'empresa', 'status', 'data_postagem') 
+    list_filter = ('status', 'data_postagem')
+    search_fields = ('titulo', 'empresa', 'descricao_vaga')
+
+@admin.register(Aplicacao)
+class AplicacaoAdmin(admin.ModelAdmin):
+    list_display = ('vaga', 'etapa_atual', 'data_envio', 'curriculo_versao')
+    list_filter = ('etapa_atual', 'data_envio')
+    search_fields = ('vaga__titulo', 'vaga__empresa', 'curriculo_versao')
