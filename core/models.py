@@ -144,8 +144,13 @@ class Vaga(models.Model):
     requisitos_bancos = models.ManyToManyField('BancoDeDados', blank=True)
 
     # Conteúdo
-    descricao_vaga = MDTextField(help_text="Cole aqui a descrição completa da vaga:")
-    anotacoes_pessoais = MDTextField(help_text="Anotações")
+    # Conteúdo
+    descricao_vaga = MDTextField(
+        verbose_name="Descrição da Vaga",
+    )
+    anotacoes_pessoais = MDTextField(
+        verbose_name="Anotações Pessoais",
+    )
 
     def __str__(self):
         return f"{self.titulo} - {self.empresa}"

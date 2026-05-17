@@ -3,8 +3,8 @@
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="mb-0">Minhas Vagas e Candidaturas</h2>
-    <a href="/admin/core/vaga/add/" target="_blank" class="btn btn-success fw-bold">
-        ➕ Cadastrar Vaga (Admin)
+    <a href="{% url 'vaga_create' %}" class="btn btn-success fw-bold">
+        ➕ Cadastrar Vaga
     </a>
 </div>
 
@@ -15,7 +15,18 @@
             <div class="card-body">
                 <span class="badge bg-secondary float-end">{{ vaga.status }}</span>
                 <h5 class="card-title fw-bold">{{ vaga.titulo }}</h5>
-                <h6 class="card-subtitle mb-3 text-muted">{{ vaga.empresa }}</h6>
+                <h6 class="card-subtitle mb-2 text-muted">{{ vaga.empresa }}</h6>
+                
+                <p class="small text-secondary mb-3">
+                    <span class="fw-bold">{{ vaga.get_nivel_display }}</span>
+                    {% if vaga.modelo_trabalho %}
+                        | {{ vaga.get_modelo_trabalho_display }}
+                    {% endif %}
+                    {% if vaga.cidade %}
+                        | 📍 {{ vaga.cidade }}
+                    {% endif %}
+                </p>
+                
                 
                 <div class="mb-3">
                     <small class="text-muted">Techs pedidas:</small><br>

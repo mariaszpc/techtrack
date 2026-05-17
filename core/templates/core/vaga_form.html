@@ -1,0 +1,23 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="row mb-5">
+    <div class="col-md-8 offset-md-2">
+        <h2 class="mb-4">Cadastrar Nova Vaga</h2>
+        
+        <div class="card shadow-sm p-4">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.media }}
+                
+                {{ form.as_p }}
+                
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-success fw-bold">Salvar Vaga</button>
+                    <a href="{% url 'vaga_list' %}" class="btn btn-outline-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

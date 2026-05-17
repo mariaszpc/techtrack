@@ -11,7 +11,23 @@
         </nav>
 
         <h1 class="display-5 fw-bold mb-1">{{ vaga.titulo }}</h1>
-        <h3 class="text-muted mb-4">{{ vaga.empresa }}</h3>
+        <h3 class="text-muted mb-3">{{ vaga.empresa }}</h3>
+
+        <div class="mb-4">
+            <span class="badge bg-primary fs-6">{{ vaga.get_nivel_display }}</span>
+            
+            {% if vaga.modelo_trabalho %}
+                <span class="badge bg-info text-dark fs-6">{{ vaga.get_modelo_trabalho_display }}</span>
+            {% endif %}
+            
+            {% if vaga.cidade %}
+                <span class="badge bg-light text-dark border fs-6">📍 {{ vaga.cidade }}</span>
+            {% endif %}
+            
+            {% if vaga.codigo %}
+                <span class="badge bg-secondary fs-6">Ref: {{ vaga.codigo }}</span>
+            {% endif %}
+        </div>
 
         <div class="my-4 p-4 bg-white border rounded">
             <h4>📋 Descrição da Vaga</h4>
