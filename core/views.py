@@ -27,3 +27,18 @@ class DashboardView(TemplateView):
         # Conta aplicações que não estejam com status "Negado" (etapa do funil)
         context['aplicacoes_ativas'] = Aplicacao.objects.exclude(etapa_atual='Proposta').count()
         return context
+
+from django.views.generic.edit import CreateView
+from django.urls import reverse_lazy
+
+class LinguagemCreateView(CreateView):
+    model = Linguagem
+    template_name = 'core/linguagem_form.html'
+    # Quais campos vão aparecer no formulário da tela:
+    fields = [
+        'titulo', 'aliases', 'descricao_breve', 'conteudo', 'referencias', 
+        'link_oficial', 'link_documentacao', 'nivel_abstracao', 
+        'modo_execucao', 'tipagem', 'paradigmas'
+    ]
+    # Para onde ir depois de salvar? Volta para a lista!
+    success_url = reverse_lazy('linguagem_list')
