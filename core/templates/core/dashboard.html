@@ -1,0 +1,48 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="row mb-4 mt-2">
+    <div class="col-12">
+        <h1 class="display-5 fw-bold">Meu Dashboard</h1>
+        <p class="lead">Visão geral do seu aprendizado e candidaturas.</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card bg-primary text-white h-100">
+            <div class="card-body">
+                <h5 class="card-title">Tecnologias na Wiki</h5>
+                <h2 class="display-4 fw-bold">{{ total_linguagens }}</h2>
+            </div>
+            <div class="card-footer border-0 bg-transparent">
+                <a href="{% url 'linguagem_list' %}" class="text-white text-decoration-none fw-bold">Acessar Wiki ➔</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="card bg-success text-white h-100">
+            <div class="card-body">
+                <h5 class="card-title">Vagas Monitoradas</h5>
+                <h2 class="display-4 fw-bold">{{ total_vagas }}</h2>
+            </div>
+            <div class="card-footer border-0 bg-transparent">
+                <a href="#" class="text-white text-decoration-none fw-bold">Ver Vagas ➔</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="card bg-warning text-dark h-100">
+            <div class="card-body">
+                <h5 class="card-title">Aplicações em Andamento</h5>
+                <h2 class="display-4 fw-bold">{{ aplicacoes_ativas }}</h2>
+            </div>
+            <div class="card-footer border-0 bg-transparent">
+                <a href="#" class="text-dark text-decoration-none fw-bold">Acompanhar Funil ➔</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
