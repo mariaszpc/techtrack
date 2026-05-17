@@ -92,11 +92,41 @@ class Framework(BaseModel):
 
 class Vaga(models.Model):
     titulo = models.CharField(max_length=200)
-    empresa = models.CharField(max_length=100)
+    empresa = models.CharField(max_length=100) 
+
+    cidade = models.CharField(max_length=100, blank=True, verbose_name="Cidade") # Opcional
+    
+    MODELO_CHOICES = [
+        ('Remoto', 'Remoto'),
+        ('Hibrido', 'Híbrido'),
+        ('Presencial', 'Presencial'),
+    ]
+    modelo_trabalho = models.CharField(
+        max_length=20, 
+        choices=MODELO_CHOICES, 
+        blank=True, 
+        verbose_name="Modelo de Trabalho"
+    ) # Opcional
+    
+    NIVEL_CHOICES = [
+        ('Estagio', 'Estágio'),
+        ('Junior', 'Júnior'),
+        ('Pleno', 'Pleno'),
+        ('Senior', 'Sênior'),
+        ('Staff', 'Staff'),
+        ('Lider', 'Líder'),
+    ]
+    nivel = models.CharField(
+        max_length=20, 
+        choices=NIVEL_CHOICES, 
+        verbose_name="Nível"
+    ) # Obrigatório (sem blank=True)
+    
+    codigo = models.CharField(max_length=50, blank=True, verbose_name="Código da Vaga") # Opcional
+
     link_anuncio = models.URLField(max_length=500)
     data_postagem = models.DateField(blank=True, null=True)
     
-    # Status do seu Processo
     STATUS_CHOICES = [
         ('Interesse', 'Apenas Interesse'),
         ('Aplicado', 'Currículo Enviado'),
@@ -108,15 +138,14 @@ class Vaga(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Interesse')
 
     # RELAÇÕES
-    # Usamos ManyToMany porque uma vaga pede várias techs, e uma tech aparece em várias vagas.
     requisitos_linguagens = models.ManyToManyField('Linguagem', blank=True)
     requisitos_frameworks = models.ManyToManyField('Framework', blank=True)
     requisitos_bibliotecas = models.ManyToManyField('Biblioteca', blank=True)
     requisitos_bancos = models.ManyToManyField('BancoDeDados', blank=True)
 
     # Conteúdo
-    descricao_vaga = MDTextField(help_text="Cole aqui a descrição completa para consulta posterior")
-    anotacoes_pessoais = MDTextField(help_text="O que você estudou ou preparou para essa vaga específica?")
+    descricao_vaga = MDTextField(help_text="Cole aqui a descrição completa da vaga:")
+    anotacoes_pessoais = MDTextField(help_text="Anotações")
 
     def __str__(self):
         return f"{self.titulo} - {self.empresa}"
@@ -140,13 +169,13 @@ class Aplicacao(models.Model):
     ]
     etapa_atual = models.CharField(max_length=20, choices=ETAPA_CHOICES, default='CV')
     
-    # Detalhes da sua participação
+    # Detalhes da participação
     curriculo_versao = models.CharField(max_length=100, blank=True, help_text="Ex: CV_DataScience_v2.pdf")
     portfolio_link = models.URLField(blank=True, help_text="Link para o projeto enviado")
     
     # Conteúdo para histórico
-    feedback_recebido = MDTextField(blank=True, help_text="O que a empresa disse sobre você?")
-    anotacoes_pos_entrevista = MDTextField(blank=True, help_text="O que você achou da empresa?")
+    feedback_recebido = MDTextField(blank=True, help_text="Feedback")
+    anotacoes_pos_entrevista = MDTextField(blank=True, help_text="Anotações")
 
     def __str__(self):
         return f"Aplicação: {self.vaga.titulo} ({self.get_etapa_atual_display()})"

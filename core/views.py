@@ -42,3 +42,13 @@ class LinguagemCreateView(CreateView):
     ]
     # Para onde ir depois de salvar? Volta para a lista!
     success_url = reverse_lazy('linguagem_list')
+
+class VagaListView(ListView):
+    model = Vaga
+    template_name = 'core/vaga_list.html'
+    context_object_name = 'vagas'
+
+class VagaDetailView(DetailView):
+    model = Vaga
+    template_name = 'core/vaga_detail.html'
+    context_object_name = 'vaga'

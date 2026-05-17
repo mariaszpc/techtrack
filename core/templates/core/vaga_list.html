@@ -1,0 +1,39 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Minhas Vagas e Candidaturas</h2>
+    <a href="/admin/core/vaga/add/" target="_blank" class="btn btn-success fw-bold">
+        ➕ Cadastrar Vaga (Admin)
+    </a>
+</div>
+
+<div class="row">
+    {% for vaga in vagas %}
+    <div class="col-md-6 mb-4">
+        <div class="card h-100 border-start border-4 {% if vaga.status == 'Aprovado' %}border-success{% elif vaga.status == 'Negado' %}border-danger{% else %}border-primary{% endif %}">
+            <div class="card-body">
+                <span class="badge bg-secondary float-end">{{ vaga.status }}</span>
+                <h5 class="card-title fw-bold">{{ vaga.titulo }}</h5>
+                <h6 class="card-subtitle mb-3 text-muted">{{ vaga.empresa }}</h6>
+                
+                <div class="mb-3">
+                    <small class="text-muted">Techs pedidas:</small><br>
+                    {% for lang in vaga.requisitos_linguagens.all %}
+                        <span class="badge bg-light text-dark border">{{ lang.titulo }}</span>
+                    {% empty %}
+                        <span class="text-muted small">Nenhum requisito listado.</span>
+                    {% endfor %}
+                </div>
+
+                <a href="{% url 'vaga_detail' vaga.pk %}" class="btn btn-outline-primary btn-sm">Ver Detalhes da Vaga</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-5">
+        <p class="text-muted lead">Nenhuma vaga monitorada ainda. Cadastre sua primeira vaga pelo painel admin!</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

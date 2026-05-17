@@ -1,0 +1,48 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="row mb-5">
+    <div class="col-lg-8">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'vaga_list' %}">Vagas</a></li>
+                <li class="breadcrumb-item active">{{ vaga.titulo }}</li>
+            </ol>
+        </nav>
+
+        <h1 class="display-5 fw-bold mb-1">{{ vaga.titulo }}</h1>
+        <h3 class="text-muted mb-4">{{ vaga.empresa }}</h3>
+
+        <div class="my-4 p-4 bg-white border rounded">
+            <h4>📋 Descrição da Vaga</h4>
+            <div class="content-body text-secondary">
+                {{ vaga.descricao_vaga|linebreaks }}
+            </div>
+        </div>
+
+        <div class="my-4 p-4 bg-light border-start border-4 border-warning rounded-end">
+            <h4>💡 Minhas Anotações de Estudo</h4>
+            <div class="content-body">
+                {{ vaga.anotacoes_pessoais|linebreaks }}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card mb-4">
+            <div class="card-header bg-dark text-white fw-bold">Status da Candidatura</div>
+            <div class="card-body text-center py-4">
+                <h3 class="fw-bold text-primary">{{ vaga.status }}</h3>
+                {% if vaga.data_postagem %}
+                    <small class="text-muted">Postada em: {{ vaga.data_postagem|date:"d/m/Y" }}</small>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="d-grid gap-2">
+            <a href="{{ vaga.link_anuncio }}" target="_blank" class="btn btn-primary fw-bold">Ver Anúncio Original ➔</a>
+            <a href="{% url 'vaga_list' %}" class="btn btn-link text-muted">← Voltar para a lista</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
