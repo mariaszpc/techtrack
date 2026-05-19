@@ -1,0 +1,42 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="card shadow-sm">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="card-title m-0">Candidatura: {{ aplicacao.vaga.titulo }}</h2>
+            <span class="badge bg-primary fs-6">{{ aplicacao.etapa_atual }}</span>
+        </div>
+        <h5 class="text-muted mb-4">{{ aplicacao.vaga.empresa }}</h5>
+        
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <p><strong>Versão do Currículo Enviado:</strong> {{ aplicacao.curriculo_versao|default:"Não informado" }}</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Link do Portfolio/Teste:</strong> 
+                    {% if aplicacao.portfolio_link %}
+                        <a href="{{ aplicacao.portfolio_link }}" target="_blank">Acessar Arquivo</a>
+                    {% else %}
+                        Não informado
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+
+        <hr>
+        
+        <h4 class="mt-4">Feedback Recebido</h4>
+        <div class="bg-light p-3 rounded mb-4">
+            <p class="mb-0">{{ aplicacao.feedback_recebido|default:"Nenhum feedback registrado ainda."|linebreaks }}</p>
+        </div>
+
+        <h4>Anotações Pós-Entrevista</h4>
+        <div class="bg-light p-3 rounded mb-4">
+            <p class="mb-0">{{ aplicacao.anotacoes_pos_entrevista|default:"Nenhuma anotação registrada."|linebreaks }}</p>
+        </div>
+
+        <a href="{% url 'aplicacao_list' %}" class="btn btn-secondary">➔ Voltar para a lista</a>
+    </div>
+</div>
+{% endblock %}

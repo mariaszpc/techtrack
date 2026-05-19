@@ -78,3 +78,26 @@ class VagaCreateView(CreateView):
     template_name = 'core/vaga_form.html'
     form_class = VagaForm
     success_url = reverse_lazy('vaga_list')
+
+# ----------------------------
+# APLICAÇÕES
+# ----------------------------
+class AplicacaoListView(ListView):
+    model = Aplicacao
+    template_name = 'core/aplicacao_list.html'
+    context_object_name = 'aplicacoes'
+
+class AplicacaoDetailView(DetailView):
+    model = Aplicacao
+    template_name = 'core/aplicacao_detail.html'
+    context_object_name = 'aplicacao'
+
+class AplicacaoCreateView(CreateView):
+    model = Aplicacao
+    template_name = 'core/aplicacao_form.html'
+    # Os campos que vão aparecer para o usuário preencher
+    fields = [
+        'vaga', 'etapa_atual', 'curriculo_versao', 
+        'portfolio_link', 'feedback_recebido', 'anotacoes_pos_entrevista'
+    ]
+    success_url = reverse_lazy('aplicacao_list')

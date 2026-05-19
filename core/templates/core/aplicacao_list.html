@@ -1,0 +1,31 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Minhas Aplicações</h2>
+    <a href="{% url 'aplicacao_create' %}" class="btn btn-primary">Nova Aplicação</a>
+</div>
+
+<div class="row">
+    {% for aplicacao in aplicacoes %}
+    <div class="col-md-4 mb-3">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">{{ aplicacao.vaga.titulo }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ aplicacao.vaga.empresa }}</h6>
+                <p class="card-text mt-3">
+                    <strong>Status:</strong> <span class="badge bg-info text-dark">{{ aplicacao.etapa_atual }}</span>
+                </p>
+                <a href="{% url 'aplicacao_detail' aplicacao.pk %}" class="btn btn-sm btn-outline-secondary">Ver Detalhes</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-light" role="alert">
+            Você ainda não registrou nenhuma aplicação. Clique no botão acima para começar!
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
